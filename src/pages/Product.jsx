@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams} from "react-router-dom";
 import { useLocalStorage } from "@uidotdev/usehooks";
 
 
@@ -16,15 +16,17 @@ const Product = () => {
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
+ 
+
   const { modal } = useSelector((store) => store.modalReducer);
 
   const { isLoading, error, data, keyword } = useSelector(
     (store) => store.dataReducer
   );
-  console.log(keyword, "key");
+  console.log(data,keyword, "key");
   const location = useLocation();
   
-  const [productInfo, setProductInfo] = useLocalStorage("productInfo", {
+  const [productInfo, setProductInfo] = useState("productInfo", {
     name: "",
     price: "",
     url: "",
@@ -38,8 +40,8 @@ const Product = () => {
     }
   }, [loc]);
 
-  console.log(location.search.split("=")[1], "loc");
-
+  //console.log(location.search.split("=")[1], "loc");
+  console.log(location.key, "loc");
   const onChangeFunc = (e, type) => {
     if (type === "url") {
       setProductInfo((prev) => ({
@@ -61,11 +63,17 @@ const Product = () => {
   };
 
   const buttonUpdateFunc = () => {
-    dispatch(updateData({ ...productInfo, id: loc }));
     dispatch(modalIsOpen());
+    dispatch(updateData({ ...productInfo, id:loc}));
+  
     navigate("/");
+    setProductInfo({
+      name: "",
+      price: "",
+      url: ""
+    });
   };
-
+ 
   const modalContent = (
     <>
       <Input
@@ -74,7 +82,8 @@ const Product = () => {
         name={"name"}
         id={"name"}
         onChange={(e) => onChangeFunc(e, "name")}
-        value={productInfo?.name}
+        defaultValue={loc ? productInfo?.name: ''}
+
       />
       <Input
         type={"text"}
@@ -82,7 +91,7 @@ const Product = () => {
         name={"price"}
         id={"price"}
         onChange={(e) => onChangeFunc(e, "price")}
-        value={productInfo?.price}
+        defaultValue={loc ? productInfo?.price : ''}
       />
       <Input
         type="file"

@@ -5,7 +5,7 @@ import { deleteData } from "../redux/slices/dataSlice";
 import { modalIsOpen } from "../redux/slices/modalSlice";
 import { useNavigate } from "react-router-dom";
 
-const ProductCard = ({ data }) => {
+const ProductCard = ({ data}) => {
   console.log(data.id, "dt");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -15,8 +15,9 @@ const ProductCard = ({ data }) => {
   const handleEdit = () => {
     dispatch(modalIsOpen());
     setOpenEdit(false);
+    localStorage.setItem("productInfo", JSON.stringify(data));
     navigate(`/?update=${data?.id}`);
-  };
+   };
   return (
     <div className="w-[200px] h-[200px] relative m-2 rounded-md bg-indigo-800">
       <div className="border-b border-white flex items-center justify-center">

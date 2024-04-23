@@ -1,9 +1,12 @@
 import { AiFillCloseCircle } from "react-icons/ai";
 import { modalIsOpen } from "../redux/slices/modalSlice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+
 
 const Modal = ({ title, content, btnText, btnFunc }) => {
-
+const navigate = useNavigate();
   const dispatch = useDispatch();
 
  
@@ -14,7 +17,7 @@ const Modal = ({ title, content, btnText, btnFunc }) => {
           <div className="text-2xl">{title}</div>
           <AiFillCloseCircle
             size={24}
-            onClick={() => dispatch(modalIsOpen())}
+            onClick={() => dispatch(modalIsOpen(),navigate("/"))}
           />
         </div>
         <div>
